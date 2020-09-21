@@ -27,8 +27,12 @@ class MenuItem extends MenuItemProvider {
   TextAlign textAlign;
   Size imageSize;
 
-  MenuItem(
-      {this.title, this.image, this.userInfo, this.textStyle, this.textAlign,this.imageSize});
+  MenuItem({this.title,
+    this.image,
+    this.userInfo,
+    this.textStyle,
+    this.textAlign,
+    this.imageSize});
 
   @override
   Widget get menuImage => image;
@@ -44,7 +48,7 @@ class MenuItem extends MenuItemProvider {
   TextAlign get menuTextAlign => textAlign ?? TextAlign.center;
 
   @override
-  Size get menuImageSize => imageSize ?? Size(30.0,30.0);
+  Size get menuImageSize => imageSize ?? Size(30.0, 30.0);
 }
 
 enum MenuType { big, oneLine }
@@ -73,7 +77,7 @@ class PopupMenu {
   Rect _showRect;
 
   /// if false menu is show above of the widget, otherwise menu is show under the widget
-  bool _isDown = true;
+  bool _isDown;
 
   /// The max column count, default is 4.
   int _maxColumn;
@@ -108,22 +112,27 @@ class PopupMenu {
 
   bool get isShow => _isShow;
 
+  double triangleOffset = 0.0;
+
   MenuTheme menuTheme;
 
-  PopupMenu(
-      {MenuClickCallback onClickMenu,
-      BuildContext context,
-      VoidCallback onDismiss,
-      int maxColumn,
-      MenuTheme menuTheme,
-      PopupMenuStateChanged stateChanged,
-      List<MenuItemProvider> items}) {
+  PopupMenu({MenuClickCallback onClickMenu,
+    BuildContext context,
+    VoidCallback onDismiss,
+    bool isDown,
+    int maxColumn,
+    MenuTheme menuTheme,
+    PopupMenuStateChanged stateChanged,
+    double triangleOffset,
+    List<MenuItemProvider> items}) {
     this.onClickMenu = onClickMenu;
     this.dismissCallback = onDismiss;
     this.stateChanged = stateChanged;
+    this._isDown = isDown;
     this.items = items;
     this.menuTheme = menuTheme ?? MenuTheme();
     this._maxColumn = maxColumn ?? 4;
+    this.triangleOffset = triangleOffset;
     if (context != null) {
       PopupMenu.context = context;
     }
@@ -179,14 +188,29 @@ class PopupMenu {
     }
 
     double dy = _showRect.top - menuHeight();
-    if (dy <= MediaQuery.of(context).padding.top + 10) {
-      // The have not enough space above, show menu under the widget.
-      dy = arrowHeight + _showRect.height + _showRect.top;
-      _isDown = false;
-    } else {
-      dy -= arrowHeight;
-      _isDown = true;
+    if(_isDown != null){
+      if(_isDown){
+        dy -= arrowHeight;
+      }else{
+        dy = arrowHeight + _showRect.height + _showRect.top;
+      }
+    }else{
+      /// 自动判断
+      if (dy <= MediaQuery
+          .of(context)
+          .padding
+          .top + 10) {
+        // The have not enough space above, show menu under the widget.
+        dy = arrowHeight + _showRect.height + _showRect.top;
+        _isDown ??= false;
+      } else {
+        dy -= arrowHeight;
+        _isDown ??= true;
+      }
     }
+
+
+
 
     return Offset(dx, dy);
   }
@@ -224,14 +248,14 @@ class PopupMenu {
             children: <Widget>[
               // triangle arrow
               Positioned(
-                left: _showRect.left + _showRect.width / 2.0 - 7.5,
+                left: _showRect.left + _showRect.width / 2.0 - 7.5 + triangleOffset,
                 top: _isDown
                     ? offset.dy + menuHeight()
                     : offset.dy - arrowHeight,
                 child: CustomPaint(
                   size: Size(15.0, arrowHeight),
                   painter:
-                      TrianglePainter(isDown: _isDown, color: _backgroundColor),
+                  TrianglePainter(isDown: _isDown, color: _backgroundColor),
                 ),
               ),
               // menu content
@@ -271,10 +295,10 @@ class PopupMenu {
     List<Widget> rows = [];
     for (int i = 0; i < _row; i++) {
       Color color =
-          (i < _row - 1 && _row != 1) ? _lineColor : Colors.transparent;
+      (i < _row - 1 && _row != 1) ? _lineColor : Colors.transparent;
       Widget rowWidget = Container(
         decoration:
-            BoxDecoration(border: Border(bottom: BorderSide(color: color))),
+        BoxDecoration(border: Border(bottom: BorderSide(color: color))),
         height: itemHeight,
         child: Row(
           children: _createRowItems(i),
@@ -290,7 +314,7 @@ class PopupMenu {
   // 创建一行的item,  row 从0开始算
   List<Widget> _createRowItems(int row) {
     List<MenuItemProvider> subItems =
-        items.sublist(row * _col, min(row * _col + _col, items.length));
+    items.sublist(row * _col, min(row * _col + _col, items.length));
     List<Widget> itemWidgets = [];
     int i = 0;
     for (var item in subItems) {
@@ -497,11 +521,8 @@ class _MenuItemWidgetState extends State<_MenuItemWidget> {
   Widget _createLineItem() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Row(children: <Widget>[
-        _createText(),
-        Spacer(),
-        widget.item.menuImage
-      ]),
+      child: Row(
+          children: <Widget>[_createText(), Spacer(), widget.item.menuImage]),
     );
   }
 
@@ -543,11 +564,10 @@ class MenuTheme {
   final MenuType menuType;
   final double arrowHeight;
 
-  MenuTheme(
-      {this.arrowHeight = defaultArrowHeight,
-      this.itemSize = const Size(defaultItemWidth, defaultItemHeight),
-      this.highlightColor = const Color(0x55000000),
-      this.backgroundColor = const Color(0xff232323),
-      this.lineColor = const Color(0xff353535),
-      this.menuType = MenuType.big});
+  MenuTheme({this.arrowHeight = defaultArrowHeight,
+    this.itemSize = const Size(defaultItemWidth, defaultItemHeight),
+    this.highlightColor = const Color(0x55000000),
+    this.backgroundColor = const Color(0xff232323),
+    this.lineColor = const Color(0xff353535),
+    this.menuType = MenuType.big});
 }
