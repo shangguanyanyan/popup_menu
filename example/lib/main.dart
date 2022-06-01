@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:popup_menu/popup_menu.dart';
+import 'package:popup_menu/popup_menu.dart' as popup;
 
 void main() => runApp(MyApp());
 
@@ -24,7 +24,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  PopupMenu menu;
+  popup.PopupMenu menu;
   GlobalKey btnKey = GlobalKey();
   GlobalKey btnKey2 = GlobalKey();
   GlobalKey btnKey3 = GlobalKey();
@@ -33,28 +33,30 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    menu = PopupMenu(items: [
+    menu = popup.PopupMenu(
+      context: context,
+        items: [
       // MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
       // MenuItem(title: 'Home', image: Icon(Icons.home, color: Colors.white,)),
-      MenuItem(
+          popup.MenuItem(
           title: 'Mail',
           image: Icon(
             Icons.mail,
             color: Colors.white,
           )),
-      MenuItem(
+          popup.MenuItem(
           title: 'Power',
           image: Icon(
             Icons.power,
             color: Colors.white,
           )),
-      MenuItem(
+          popup.MenuItem(
           title: 'Setting',
           image: Icon(
             Icons.settings,
             color: Colors.white,
           )),
-      MenuItem(
+          popup.MenuItem(
           title: 'PopupMenu',
           image: Icon(
             Icons.menu,
@@ -67,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('menu is ${isShow ? 'showing' : 'closed'}');
   }
 
-  void onClickMenu(MenuItemProvider item) {
+  void onClickMenu(popup.MenuItemProvider item) {
     print('Click menu -> ${item.menuTitle}');
   }
 
@@ -77,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PopupMenu.context = context;
+    popup.PopupMenu.context = context;
 
     return Scaffold(
       appBar: AppBar(
@@ -142,16 +144,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void maxColumn() {
-    PopupMenu menu = PopupMenu(
+    popup.PopupMenu menu = popup.PopupMenu(
         // backgroundColor: Colors.teal,
         // lineColor: Colors.tealAccent,
-        menuTheme: MenuTheme(
+      context: context,
+        menuTheme: popup.MenuTheme(
             itemSize: Size(300, 100),
-            menuType: MenuType.oneLine,
+            menuType: popup.MenuType.oneLine,
             arrowHeight: 10.0),
         maxColumn: 1,
         items: [
-          MenuItem(
+          popup.MenuItem(
               title: 'Copy',
               image: Image.asset('assets/copy.png'),
               textStyle: TextStyle(
@@ -171,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //       Icons.mail,
           //       color: Colors.white,
           //     )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Power',
               image: Icon(
                 Icons.power,
@@ -181,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 fontSize: 24,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Setting',
               image: Icon(
                 Icons.settings,
@@ -191,7 +194,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 fontSize: 24,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'PopupMenu',
               image: Icon(
                 Icons.menu,
@@ -210,38 +213,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //
   void customBackground() {
-    PopupMenu menu = PopupMenu(
+    popup.PopupMenu menu = popup.PopupMenu(
         // backgroundColor: Colors.teal,
         // lineColor: Colors.tealAccent,
         // maxColumn: 2,
         items: [
-          MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
-          MenuItem(
+          popup.MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
+          popup.MenuItem(
               title: 'Home',
               // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
               image: Icon(
                 Icons.home,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Mail',
               image: Icon(
                 Icons.mail,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Power',
               image: Icon(
                 Icons.power,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Setting',
               image: Icon(
                 Icons.settings,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'PopupMenu',
               image: Icon(
                 Icons.menu,

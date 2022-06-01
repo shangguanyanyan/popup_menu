@@ -1,11 +1,11 @@
-import 'package:flutter/rendering.dart';
+import 'package:flutter/material.dart';
 
 // 画弹出菜单下面的三角形
 class TrianglePainter extends CustomPainter {
   bool isDown;
   Color color;
 
-  TrianglePainter({this.isDown = true, this.color});
+  TrianglePainter({this.isDown = true, this.color = Colors.lightBlue});
 
   @override
   void paint(Canvas canvas, Size size) {

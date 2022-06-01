@@ -1,13 +1,11 @@
-
 import 'package:flutter/material.dart';
-import 'package:popup_menu/popup_menu.dart';
+import 'package:popup_menu/popup_menu.dart' as popup;
 
 class GestureDemo extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _GestureDemoState();
   }
-
 }
 
 class _GestureDemoState extends State<GestureDemo> {
@@ -47,38 +45,39 @@ class _GestureDemoState extends State<GestureDemo> {
   }
 
   void onShow() {
-    PopupMenu menu = PopupMenu(
+    popup.PopupMenu menu = popup.PopupMenu(
         // backgroundColor: Colors.teal,
         // lineColor: Colors.tealAccent,
         // maxColumn: 2,
+        context: context,
         items: [
-          MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
-          MenuItem(
+          popup.MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
+          popup.MenuItem(
               title: 'Home',
               // textStyle: TextStyle(fontSize: 10.0, color: Colors.tealAccent),
               image: Icon(
                 Icons.home,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Mail',
               image: Icon(
                 Icons.mail,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Power',
               image: Icon(
                 Icons.power,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'Setting',
               image: Icon(
                 Icons.settings,
                 color: Colors.white,
               )),
-          MenuItem(
+          popup.MenuItem(
               title: 'PopupMenu',
               image: Icon(
                 Icons.menu,
@@ -91,11 +90,7 @@ class _GestureDemoState extends State<GestureDemo> {
     menu.show(widgetKey: btnKey);
   }
 
-  void onClickMenu(MenuItemProvider item) {
+  void onClickMenu(popup.MenuItemProvider item) {}
 
-  }
-
-  void onDismiss() {
-    
-  }
+  void onDismiss() {}
 }
